@@ -1,15 +1,17 @@
 
 using System;
+using EquipmentRentalApp.Database;
 using Microsoft.Data.SqlClient;
 
-namespace IndustrialEquipmentRentalSystem.Forms.Delete
+namespace EquipmentRentalApp.Forms.Delete
 {
     public class CancelAgreement
     {
         public static bool Cancel(int agreementID)
         {
             // Ahmed Maher's transaction code
-            using (SqlConnection conn = new SqlConnection(DatabaseConnection.ConnectionString))
+            using (SqlConnection conn = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=EquipmentRentalDB;Integrated Security=True"))
+
             {
                 conn.Open();
                 SqlTransaction transaction = conn.BeginTransaction();

@@ -10,7 +10,7 @@ namespace EquipmentRentalApp.Forms
     public partial class ServiceYardForm : Form
     {
         private DataGridView dgvYards;
-        private TextBox txtLocation, txtCapacity, txtContact;
+        private TextBox txtYardName, txtLocation, txtCapacity;
         private Button btnInsert, btnUpdate, btnDelete, btnClear;
         private Label lblMsg;
         
@@ -41,45 +41,46 @@ namespace EquipmentRentalApp.Forms
             Panel inputPanel = new Panel
             {
                 Location = new Point(20, 70),
-                Size = new Size(950, 150),
+                Size = new Size(950, 155),
                 BackColor = Color.FromArgb(60, 60, 65)
             };
+
+            // FIX: added YardName field (required by DB), removed non-existent ContactNo field
+            Label lblYardName = new Label { Text = "Yard Name:", Location = new Point(20, 20), Size = new Size(100, 25), ForeColor = Color.White };
+            txtYardName = new TextBox { Location = new Point(130, 18), Size = new Size(300, 25) };
+
+            Label lblLocation = new Label { Text = "Location:", Location = new Point(20, 60), Size = new Size(100, 25), ForeColor = Color.White };
+            txtLocation = new TextBox { Location = new Point(130, 58), Size = new Size(300, 25) };
             
-            Label lblLocation = new Label { Text = "Location:", Location = new Point(20, 25), Size = new Size(100, 25), ForeColor = Color.White };
-            txtLocation = new TextBox { Location = new Point(130, 23), Size = new Size(300, 25) };
+            Label lblCapacity = new Label { Text = "Capacity:", Location = new Point(20, 100), Size = new Size(100, 25), ForeColor = Color.White };
+            txtCapacity = new TextBox { Location = new Point(130, 98), Size = new Size(150, 25) };
             
-            Label lblCapacity = new Label { Text = "Capacity:", Location = new Point(20, 65), Size = new Size(100, 25), ForeColor = Color.White };
-            txtCapacity = new TextBox { Location = new Point(130, 63), Size = new Size(150, 25) };
-            
-            Label lblContact = new Label { Text = "Contact No:", Location = new Point(20, 105), Size = new Size(100, 25), ForeColor = Color.White };
-            txtContact = new TextBox { Location = new Point(130, 103), Size = new Size(200, 25) };
-            
-            btnInsert = new Button { Text = "➕ Add Yard", Location = new Point(500, 25), Size = new Size(120, 35), BackColor = Color.FromArgb(40, 167, 69), ForeColor = Color.White };
+            btnInsert = new Button { Text = "➕ Add Yard", Location = new Point(500, 20), Size = new Size(120, 35), BackColor = Color.FromArgb(40, 167, 69), ForeColor = Color.White };
             btnInsert.Click += BtnInsert_Click;
             
-            btnUpdate = new Button { Text = "✏ Update", Location = new Point(630, 25), Size = new Size(100, 35), BackColor = Color.FromArgb(0, 123, 255), ForeColor = Color.White };
+            btnUpdate = new Button { Text = "✏ Update", Location = new Point(630, 20), Size = new Size(100, 35), BackColor = Color.FromArgb(0, 123, 255), ForeColor = Color.White };
             btnUpdate.Click += BtnUpdate_Click;
             
-            btnDelete = new Button { Text = "🗑 Delete", Location = new Point(740, 25), Size = new Size(100, 35), BackColor = Color.FromArgb(220, 53, 69), ForeColor = Color.White };
+            btnDelete = new Button { Text = "🗑 Delete", Location = new Point(740, 20), Size = new Size(100, 35), BackColor = Color.FromArgb(220, 53, 69), ForeColor = Color.White };
             btnDelete.Click += BtnDelete_Click;
             
-            btnClear = new Button { Text = "Clear", Location = new Point(850, 25), Size = new Size(80, 35), BackColor = Color.FromArgb(108, 117, 125), ForeColor = Color.White };
+            btnClear = new Button { Text = "Clear", Location = new Point(850, 20), Size = new Size(80, 35), BackColor = Color.FromArgb(108, 117, 125), ForeColor = Color.White };
             btnClear.Click += (s, e) => ClearForm();
             
             inputPanel.Controls.AddRange(new Control[] { 
-                lblLocation, txtLocation, lblCapacity, txtCapacity, lblContact, txtContact,
+                lblYardName, txtYardName, lblLocation, txtLocation, lblCapacity, txtCapacity,
                 btnInsert, btnUpdate, btnDelete, btnClear
             });
             this.Controls.Add(inputPanel);
             
             // Message
-            lblMsg = new Label { Location = new Point(20, 230), Size = new Size(400, 25), ForeColor = Color.LightGreen };
+            lblMsg = new Label { Location = new Point(20, 235), Size = new Size(400, 25), ForeColor = Color.LightGreen };
             this.Controls.Add(lblMsg);
             
             // DataGridView
             dgvYards = new DataGridView
             {
-                Location = new Point(20, 260),
+                Location = new Point(20, 265),
                 Size = new Size(950, 300),
                 BackgroundColor = Color.White,
                 AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
@@ -92,18 +93,11 @@ namespace EquipmentRentalApp.Forms
         
         private void LoadYards()
         {
-            string query = "SELECT YardID, Location, Capacity, ContactNo FROM SERVICEYARD ORDER BY Location";
+            // FIX: correct table name "ServiceYard", correct columns (YardName, Location, Capacity — no ContactNo)
+            string query = "SELECT YardID, YardName, Location, Capacity FROM ServiceYard ORDER BY YardName";
             dgvYards.DataSource = DatabaseHelper.ExecuteQuery(query);
             if (dgvYards.Columns["YardID"] != null)
                 dgvYards.Columns["YardID"].Visible = false;
-                
-            // Set column headers
-            if (dgvYards.Columns["Location"] != null)
-                dgvYards.Columns["Location"].HeaderText = "Location";
-            if (dgvYards.Columns["Capacity"] != null)
-                dgvYards.Columns["Capacity"].HeaderText = "Capacity";
-            if (dgvYards.Columns["ContactNo"] != null)
-                dgvYards.Columns["ContactNo"].HeaderText = "Contact No";
         }
         
         private void DgvYards_SelectionChanged(object sender, EventArgs e)
@@ -111,33 +105,33 @@ namespace EquipmentRentalApp.Forms
             if (dgvYards.SelectedRows.Count > 0)
             {
                 var row = dgvYards.SelectedRows[0];
+                txtYardName.Text = row.Cells["YardName"].Value?.ToString();
                 txtLocation.Text = row.Cells["Location"].Value?.ToString();
                 txtCapacity.Text = row.Cells["Capacity"].Value?.ToString();
-                txtContact.Text = row.Cells["ContactNo"].Value?.ToString();
                 lblMsg.Text = "";
             }
         }
         
         private void BtnInsert_Click(object sender, EventArgs e)
         {
-            // Validate
-            if (string.IsNullOrWhiteSpace(txtLocation.Text))
+            if (string.IsNullOrWhiteSpace(txtYardName.Text))
             {
-                ShowMessage("Location is required!", Color.Red);
+                ShowMessage("Yard Name is required!", Color.Red);
                 return;
             }
             
             if (!int.TryParse(txtCapacity.Text, out int capacity))
                 capacity = 0;
             
-            string query = @"INSERT INTO SERVICEYARD (Location, Capacity, ContactNo) 
-                             VALUES (@location, @capacity, @contact)";
+            // FIX: correct table name "ServiceYard", correct columns (no ContactNo)
+            string query = @"INSERT INTO ServiceYard (YardName, Location, Capacity) 
+                             VALUES (@yardName, @location, @capacity)";
             
             var parameters = new[]
             {
-                new SqlParameter("@location", txtLocation.Text.Trim()),
-                new SqlParameter("@capacity", capacity),
-                new SqlParameter("@contact", txtContact.Text.Trim())
+                new SqlParameter("@yardName",  txtYardName.Text.Trim()),
+                new SqlParameter("@location",  txtLocation.Text.Trim()),
+                new SqlParameter("@capacity",  capacity)
             };
             
             try
@@ -164,26 +158,27 @@ namespace EquipmentRentalApp.Forms
                 return;
             }
             
-            if (string.IsNullOrWhiteSpace(txtLocation.Text))
+            if (string.IsNullOrWhiteSpace(txtYardName.Text))
             {
-                ShowMessage("Location is required!", Color.Red);
+                ShowMessage("Yard Name is required!", Color.Red);
                 return;
             }
             
             int id = Convert.ToInt32(dgvYards.SelectedRows[0].Cells["YardID"].Value);
             
-            string query = @"UPDATE SERVICEYARD 
-                             SET Location = @location, 
-                                 Capacity = @capacity, 
-                                 ContactNo = @contact 
+            // FIX: correct table name and columns
+            string query = @"UPDATE ServiceYard 
+                             SET YardName  = @yardName, 
+                                 Location  = @location, 
+                                 Capacity  = @capacity
                              WHERE YardID = @id";
             
             var parameters = new[]
             {
-                new SqlParameter("@location", txtLocation.Text.Trim()),
-                new SqlParameter("@capacity", int.TryParse(txtCapacity.Text, out int c) ? c : 0),
-                new SqlParameter("@contact", txtContact.Text.Trim()),
-                new SqlParameter("@id", id)
+                new SqlParameter("@yardName",  txtYardName.Text.Trim()),
+                new SqlParameter("@location",  txtLocation.Text.Trim()),
+                new SqlParameter("@capacity",  int.TryParse(txtCapacity.Text, out int c) ? c : 0),
+                new SqlParameter("@id",        id)
             };
             
             try
@@ -209,10 +204,10 @@ namespace EquipmentRentalApp.Forms
                 return;
             }
             
-            string location = dgvYards.SelectedRows[0].Cells["Location"].Value?.ToString();
+            string yardName = dgvYards.SelectedRows[0].Cells["YardName"].Value?.ToString();
             
             var confirm = MessageBox.Show(
-                $"Delete service yard:\n\"{location}\"?\n\nEquipment in this yard will be unassigned!",
+                $"Delete service yard:\n\"{yardName}\"?\n\nEquipment in this yard will be unassigned!",
                 "Confirm Delete", 
                 MessageBoxButtons.YesNo, 
                 MessageBoxIcon.Warning);
@@ -222,16 +217,16 @@ namespace EquipmentRentalApp.Forms
                 int id = Convert.ToInt32(dgvYards.SelectedRows[0].Cells["YardID"].Value);
                 
                 // First unassign equipment from this yard
-                string unassignEq = "UPDATE EQUIPMENT SET YardID = NULL WHERE YardID = @id";
+                string unassignEq = "UPDATE Equipment SET YardID = NULL WHERE YardID = @id";
                 DatabaseHelper.ExecuteNonQuery(unassignEq, new[] { new SqlParameter("@id", id) });
                 
-                // Then delete the yard
-                string query = "DELETE FROM SERVICEYARD WHERE YardID = @id";
+                // FIX: correct table name "ServiceYard"
+                string query = "DELETE FROM ServiceYard WHERE YardID = @id";
                 int result = DatabaseHelper.ExecuteNonQuery(query, new[] { new SqlParameter("@id", id) });
                 
                 if (result > 0)
                 {
-                    ShowMessage("✓ Service yard deleted successfully!", Color.Yellow);
+                    ShowMessage("✓ Service yard deleted.", Color.Yellow);
                     LoadYards();
                     ClearForm();
                 }
@@ -240,9 +235,9 @@ namespace EquipmentRentalApp.Forms
         
         private void ClearForm()
         {
+            txtYardName.Clear();
             txtLocation.Clear();
             txtCapacity.Clear();
-            txtContact.Clear();
             lblMsg.Text = "";
         }
         
@@ -250,8 +245,6 @@ namespace EquipmentRentalApp.Forms
         {
             lblMsg.Text = msg;
             lblMsg.ForeColor = color;
-            
-            // Auto-clear after 3 seconds
             System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
             timer.Interval = 3000;
             timer.Tick += (s, e) => { 

@@ -3,12 +3,12 @@ using System.Data;
 using Microsoft.Data.SqlClient;
 using System.Windows.Forms;
 
-namespace IndustrialEquipmentProject
+namespace EquipmentRentalApp
 {
     public partial class SelectTableGUI : Form
     {
         Microsoft.Data.SqlClient.SqlConnection con = new Microsoft.Data.SqlClient.SqlConnection(
-        "Server=localhost;Database=IndustrialEquipmentDB;Trusted_Connection=True;");
+        "Server=localhost;Database=EquipmentRentalDB;Trusted_Connection=True;");
 
         private Button btnLoad;
         private DataGridView dataGridView1;

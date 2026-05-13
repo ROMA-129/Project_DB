@@ -10,7 +10,7 @@ namespace EquipmentRentalApp.Forms
     public partial class EquipmentForm : Form
     {
         private DataGridView dgvEquipment;
-        private TextBox txtModel, txtEnginePower, txtHourlyRate, txtLocation, txtSearch;
+        private TextBox txtModel, txtEnginePower, txtHourlyRate, txtSearch;
         private ComboBox cboStatus, cboYard;
         private Button btnInsert, btnUpdate, btnDelete, btnSearch, btnClear;
         private Label lblMsg;
@@ -63,7 +63,7 @@ namespace EquipmentRentalApp.Forms
             Panel inputPanel = new Panel
             {
                 Location = new Point(20, 130),
-                Size = new Size(1050, 180),
+                Size = new Size(1050, 160),
                 BackColor = Color.FromArgb(60, 60, 65)
             };
             
@@ -71,53 +71,50 @@ namespace EquipmentRentalApp.Forms
             Label lblModel = new Label { Text = "Model:", Location = new Point(20, 20), Size = new Size(100, 25), ForeColor = Color.White };
             txtModel = new TextBox { Location = new Point(130, 18), Size = new Size(200, 25) };
             
-            Label lblEnginePower = new Label { Text = "Engine Power:", Location = new Point(360, 20), Size = new Size(100, 25), ForeColor = Color.White };
-            txtEnginePower = new TextBox { Location = new Point(470, 18), Size = new Size(150, 25) };
+            Label lblEnginePower = new Label { Text = "Engine Power:", Location = new Point(360, 20), Size = new Size(110, 25), ForeColor = Color.White };
+            txtEnginePower = new TextBox { Location = new Point(480, 18), Size = new Size(150, 25) };
             
-            Label lblHourlyRate = new Label { Text = "Hourly Rate:", Location = new Point(650, 20), Size = new Size(100, 25), ForeColor = Color.White };
-            txtHourlyRate = new TextBox { Location = new Point(760, 18), Size = new Size(120, 25) };
+            Label lblHourlyRate = new Label { Text = "Hourly Rate:", Location = new Point(660, 20), Size = new Size(100, 25), ForeColor = Color.White };
+            txtHourlyRate = new TextBox { Location = new Point(770, 18), Size = new Size(120, 25) };
             
             // Row 2
             Label lblStatus = new Label { Text = "Status:", Location = new Point(20, 60), Size = new Size(100, 25), ForeColor = Color.White };
-            cboStatus = new ComboBox { Location = new Point(130, 58), Size = new Size(150, 25), DropDownStyle = ComboBoxStyle.DropDownList };
-            cboStatus.Items.AddRange(new object[] { "Available", "Rented", "Maintenance" });
+            cboStatus = new ComboBox { Location = new Point(130, 58), Size = new Size(180, 25), DropDownStyle = ComboBoxStyle.DropDownList };
+            cboStatus.Items.AddRange(new object[] { "Available", "Rented", "Under Maintenance" });
             cboStatus.SelectedIndex = 0;
             
-            Label lblYard = new Label { Text = "Service Yard:", Location = new Point(360, 60), Size = new Size(100, 25), ForeColor = Color.White };
-            cboYard = new ComboBox { Location = new Point(470, 58), Size = new Size(200, 25), DropDownStyle = ComboBoxStyle.DropDownList };
-            
-            Label lblLocation = new Label { Text = "Location:", Location = new Point(20, 100), Size = new Size(100, 25), ForeColor = Color.White };
-            txtLocation = new TextBox { Location = new Point(130, 98), Size = new Size(300, 25) };
+            Label lblYard = new Label { Text = "Service Yard:", Location = new Point(360, 60), Size = new Size(110, 25), ForeColor = Color.White };
+            cboYard = new ComboBox { Location = new Point(480, 58), Size = new Size(200, 25), DropDownStyle = ComboBoxStyle.DropDownList };
             
             // Buttons
-            btnInsert = new Button { Text = "➕ Add Equipment", Location = new Point(550, 95), Size = new Size(130, 35), BackColor = Color.FromArgb(40, 167, 69), ForeColor = Color.White };
+            btnInsert = new Button { Text = "➕ Add Equipment", Location = new Point(550, 105), Size = new Size(130, 35), BackColor = Color.FromArgb(40, 167, 69), ForeColor = Color.White };
             btnInsert.Click += BtnInsert_Click;
             
-            btnUpdate = new Button { Text = "✏ Update", Location = new Point(695, 95), Size = new Size(100, 35), BackColor = Color.FromArgb(0, 123, 255), ForeColor = Color.White };
+            btnUpdate = new Button { Text = "✏ Update", Location = new Point(695, 105), Size = new Size(100, 35), BackColor = Color.FromArgb(0, 123, 255), ForeColor = Color.White };
             btnUpdate.Click += BtnUpdate_Click;
             
-            btnDelete = new Button { Text = "🗑 Delete", Location = new Point(805, 95), Size = new Size(100, 35), BackColor = Color.FromArgb(220, 53, 69), ForeColor = Color.White };
+            btnDelete = new Button { Text = "🗑 Delete", Location = new Point(805, 105), Size = new Size(100, 35), BackColor = Color.FromArgb(220, 53, 69), ForeColor = Color.White };
             btnDelete.Click += BtnDelete_Click;
             
-            btnClear = new Button { Text = "Clear", Location = new Point(915, 95), Size = new Size(100, 35), BackColor = Color.FromArgb(108, 117, 125), ForeColor = Color.White };
+            btnClear = new Button { Text = "Clear", Location = new Point(915, 105), Size = new Size(100, 35), BackColor = Color.FromArgb(108, 117, 125), ForeColor = Color.White };
             btnClear.Click += (s, e) => ClearForm();
             
             inputPanel.Controls.AddRange(new Control[] { 
                 lblModel, txtModel, lblEnginePower, txtEnginePower, lblHourlyRate, txtHourlyRate,
-                lblStatus, cboStatus, lblYard, cboYard, lblLocation, txtLocation,
+                lblStatus, cboStatus, lblYard, cboYard,
                 btnInsert, btnUpdate, btnDelete, btnClear
             });
             this.Controls.Add(inputPanel);
             
             // Message Label
-            lblMsg = new Label { Location = new Point(20, 320), Size = new Size(400, 25), ForeColor = Color.LightGreen };
+            lblMsg = new Label { Location = new Point(20, 300), Size = new Size(400, 25), ForeColor = Color.LightGreen };
             this.Controls.Add(lblMsg);
             
             // DataGridView
             dgvEquipment = new DataGridView
             {
-                Location = new Point(20, 350),
-                Size = new Size(1050, 260),
+                Location = new Point(20, 330),
+                Size = new Size(1050, 280),
                 BackgroundColor = Color.White,
                 AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
                 SelectionMode = DataGridViewSelectionMode.FullRowSelect,
@@ -129,23 +126,26 @@ namespace EquipmentRentalApp.Forms
         
         private void LoadYards()
         {
-            string query = "SELECT YardID, Location FROM SERVICEYARD ORDER BY Location";
+            // FIX: correct table name "ServiceYard", correct column "YardName"
+            string query = "SELECT YardID, YardName FROM ServiceYard ORDER BY YardName";
             DataTable dt = DatabaseHelper.ExecuteQuery(query);
             cboYard.Items.Clear();
-            cboYard.Items.Add("-- None --");
+            cboYard.Items.Add(new { YardID = (int?)null, YardName = "-- None --" });
             foreach (DataRow row in dt.Rows)
             {
-                cboYard.Items.Add($"{row["Location"]}");
+                cboYard.Items.Add(new { YardID = (int?)Convert.ToInt32(row["YardID"]), YardName = row["YardName"].ToString() });
             }
+            cboYard.DisplayMember = "YardName";
             cboYard.SelectedIndex = 0;
         }
         
         private void LoadEquipment()
         {
-            string query = @"SELECT e.EquipmentID, e.Model, e.EnginePower, e.HourlyRate, 
-                                    e.Location, e.Status, ISNULL(s.Location, '—') AS Yard
-                             FROM EQUIPMENT e
-                             LEFT JOIN SERVICEYARD s ON s.YardID = e.YardID
+            // FIX: correct table names "Equipment", "ServiceYard"; removed non-existent Location column
+            string query = @"SELECT e.EquipmentID, e.Model, e.EnginePower, e.HourlyRate,
+                                    e.Status, ISNULL(s.YardName, '—') AS Yard
+                             FROM Equipment e
+                             LEFT JOIN ServiceYard s ON s.YardID = e.YardID
                              ORDER BY e.EquipmentID";
             dgvEquipment.DataSource = DatabaseHelper.ExecuteQuery(query);
             if (dgvEquipment.Columns["EquipmentID"] != null)
@@ -160,10 +160,10 @@ namespace EquipmentRentalApp.Forms
                 return;
             }
             
-            string query = @"SELECT e.EquipmentID, e.Model, e.EnginePower, e.HourlyRate, 
-                                    e.Location, e.Status, ISNULL(s.Location, '—') AS Yard
-                             FROM EQUIPMENT e
-                             LEFT JOIN SERVICEYARD s ON s.YardID = e.YardID
+            string query = @"SELECT e.EquipmentID, e.Model, e.EnginePower, e.HourlyRate,
+                                    e.Status, ISNULL(s.YardName, '—') AS Yard
+                             FROM Equipment e
+                             LEFT JOIN ServiceYard s ON s.YardID = e.YardID
                              WHERE e.Model LIKE @search
                              ORDER BY e.EquipmentID";
             var param = new[] { new SqlParameter("@search", "%" + txtSearch.Text.Trim() + "%") };
@@ -178,7 +178,6 @@ namespace EquipmentRentalApp.Forms
                 txtModel.Text = row.Cells["Model"].Value?.ToString();
                 txtEnginePower.Text = row.Cells["EnginePower"].Value?.ToString();
                 txtHourlyRate.Text = row.Cells["HourlyRate"].Value?.ToString();
-                txtLocation.Text = row.Cells["Location"].Value?.ToString();
                 string status = row.Cells["Status"].Value?.ToString();
                 if (!string.IsNullOrEmpty(status))
                     cboStatus.SelectedItem = status;
@@ -193,17 +192,19 @@ namespace EquipmentRentalApp.Forms
                 return;
             }
             
+            if (!decimal.TryParse(txtEnginePower.Text, out decimal engine))
+                engine = 0;
             if (!decimal.TryParse(txtHourlyRate.Text, out decimal rate))
                 rate = 0;
-            
-            string query = @"INSERT INTO EQUIPMENT (Model, Engineer, HourlyRate, Location, Status, YardID) 
-                             VALUES (@model, @engine, @rate, @loc, @status, NULL)";
+
+            // FIX: correct column name "EnginePower", removed non-existent "Location" column
+            string query = @"INSERT INTO Equipment (Model, EnginePower, HourlyRate, Status, YardID) 
+                             VALUES (@model, @engine, @rate, @status, NULL)";
             var parameters = new[]
             {
                 new SqlParameter("@model", txtModel.Text.Trim()),
-                new SqlParameter("@engine", txtEnginePower.Text.Trim()),
+                new SqlParameter("@engine", engine),
                 new SqlParameter("@rate", rate),
-                new SqlParameter("@loc", txtLocation.Text.Trim()),
                 new SqlParameter("@status", cboStatus.SelectedItem?.ToString() ?? "Available")
             };
             
@@ -225,16 +226,19 @@ namespace EquipmentRentalApp.Forms
             }
             
             int id = Convert.ToInt32(dgvEquipment.SelectedRows[0].Cells["EquipmentID"].Value);
-            
-            string query = @"UPDATE EQUIPMENT SET Model = @model, Engineer = @engine, 
-                             HourlyRate = @rate, Location = @loc, Status = @status 
+
+            if (!decimal.TryParse(txtEnginePower.Text, out decimal engine))
+                engine = 0;
+
+            // FIX: correct column name "EnginePower", removed non-existent "Location" column
+            string query = @"UPDATE Equipment SET Model = @model, EnginePower = @engine, 
+                             HourlyRate = @rate, Status = @status 
                              WHERE EquipmentID = @id";
             var parameters = new[]
             {
                 new SqlParameter("@model", txtModel.Text.Trim()),
-                new SqlParameter("@engine", txtEnginePower.Text.Trim()),
+                new SqlParameter("@engine", engine),
                 new SqlParameter("@rate", decimal.TryParse(txtHourlyRate.Text, out decimal r) ? r : 0),
-                new SqlParameter("@loc", txtLocation.Text.Trim()),
                 new SqlParameter("@status", cboStatus.SelectedItem?.ToString() ?? "Available"),
                 new SqlParameter("@id", id)
             };
@@ -260,7 +264,7 @@ namespace EquipmentRentalApp.Forms
             if (confirm == DialogResult.Yes)
             {
                 int id = Convert.ToInt32(dgvEquipment.SelectedRows[0].Cells["EquipmentID"].Value);
-                string query = "DELETE FROM EQUIPMENT WHERE EquipmentID = @id";
+                string query = "DELETE FROM Equipment WHERE EquipmentID = @id";
                 int result = DatabaseHelper.ExecuteNonQuery(query, new[] { new SqlParameter("@id", id) });
                 
                 if (result > 0)
@@ -277,7 +281,6 @@ namespace EquipmentRentalApp.Forms
             txtModel.Clear();
             txtEnginePower.Clear();
             txtHourlyRate.Clear();
-            txtLocation.Clear();
             cboStatus.SelectedIndex = 0;
             cboYard.SelectedIndex = 0;
         }

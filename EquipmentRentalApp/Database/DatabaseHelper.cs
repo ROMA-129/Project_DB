@@ -8,7 +8,7 @@ namespace EquipmentRentalApp.Database
     public static class DatabaseHelper
     {
         private static readonly string ConnectionString = 
-            @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=EquipmentRentalDB;Integrated Security=True";
+          @"Server=.;Database=EquipmentRentalDB;Integrated Security=True;TrustServerCertificate=True";
         
         public static DataTable ExecuteQuery(string query, SqlParameter[] parameters = null)
         {

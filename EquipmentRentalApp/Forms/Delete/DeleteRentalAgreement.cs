@@ -2,7 +2,7 @@
 using System;
 using Microsoft.Data.SqlClient;
 
-namespace IndustrialEquipmentRentalSystem.Forms.Delete
+namespace EquipmentRentalApp.Forms.Delete
 {
     public class DeleteRentalAgreement
     {
@@ -11,7 +11,8 @@ namespace IndustrialEquipmentRentalSystem.Forms.Delete
             
             string query = "DELETE FROM RentalAgreement WHERE AgreementID = @AgreementID";
             
-            using (SqlConnection conn = new SqlConnection(DatabaseConnection.ConnectionString))
+            using (SqlConnection conn = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=EquipmentRentalDB;Integrated Security=True"))
+
             {
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@AgreementID", agreementID);
