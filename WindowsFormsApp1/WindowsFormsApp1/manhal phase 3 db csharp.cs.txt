@@ -1,0 +1,123 @@
+using System;
+using System.Data.SqlClient;
+
+namespace IndustrialEquipmentRentalSystem
+{
+    public class DeleteOperations
+    {
+        private static readonly string ConnectionString =
+            "Server=.;Database=IndustrialEquipmentDB;Integrated Security=True;";
+
+        public static int DeleteInspectionsByAgreement(int agreementID)
+        {
+            int rowsAffected = 0;
+
+            string query = "DELETE FROM SafetyInspection WHERE AgreementID = @AgreementID";
+
+            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            {
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@AgreementID", agreementID);
+
+                try
+                {
+                    conn.Open();
+                    rowsAffected = cmd.ExecuteNonQuery();
+                    Console.WriteLine($"SafetyInspection: {rowsAffected} row(s) deleted for AgreementID = {agreementID}.");
+                }
+                catch (SqlException ex)
+                {
+                    Console.WriteLine($"Error: {ex.Message}");
+                    throw;
+                }
+            }
+
+            return rowsAffected;
+        }
+
+        public static int DeleteRentalAgreement(int agreementID)
+        {
+            int rowsAffected = 0;
+
+            string query = "DELETE FROM RentalAgreement WHERE AgreementID = @AgreementID";
+
+            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            {
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@AgreementID", agreementID);
+
+                try
+                {
+                    conn.Open();
+                    rowsAffected = cmd.ExecuteNonQuery();
+
+                    if (rowsAffected > 0)
+                        Console.WriteLine($"RentalAgreement: {rowsAffected} row(s) deleted for AgreementID = {agreementID}.");
+                    else
+                        Console.WriteLine($"No RentalAgreement found with AgreementID = {agreementID}.");
+                }
+                catch (SqlException ex)
+                {
+                    Console.WriteLine($"Error: {ex.Message}");
+                    throw;
+                }
+            }
+
+            return rowsAffected;
+        }
+
+        public static void CancelAgreement(int agreementID)
+        {
+            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            {
+                conn.Open();
+                SqlTransaction transaction = conn.BeginTransaction();
+
+                try
+                {
+                    SqlCommand deleteInspections = new SqlCommand(
+                        "DELETE FROM SafetyInspection WHERE AgreementID = @AgreementID",
+                        conn, transaction);
+                    deleteInspections.Parameters.AddWithValue("@AgreementID", agreementID);
+                    int inspectionsDeleted = deleteInspections.ExecuteNonQuery();
+                    Console.WriteLine($"SafetyInspection: {inspectionsDeleted} row(s) removed.");
+
+                    SqlCommand deleteAgreement = new SqlCommand(
+                        "DELETE FROM RentalAgreement WHERE AgreementID = @AgreementID",
+                        conn, transaction);
+                    deleteAgreement.Parameters.AddWithValue("@AgreementID", agreementID);
+                    int agreementsDeleted = deleteAgreement.ExecuteNonQuery();
+                    Console.WriteLine($"RentalAgreement: {agreementsDeleted} row(s) removed.");
+
+                    transaction.Commit();
+                    Console.WriteLine($"Agreement {agreementID} cancelled successfully.");
+                }
+                catch (SqlException ex)
+                {
+                    transaction.Rollback();
+                    Console.WriteLine($"Transaction rolled back. Error: {ex.Message}");
+                    throw;
+                }
+            }
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int targetAgreementID = 3;
+
+            try
+            {
+                DeleteOperations.CancelAgreement(targetAgreementID);
+            }
+            catch
+            {
+                Console.WriteLine("Operation failed.");
+            }
+
+            Console.ReadKey();
+        }
+    }
+}
