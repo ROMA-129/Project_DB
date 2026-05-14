@@ -6,7 +6,7 @@ namespace EquipmentRentalApp.Forms
 {
     public partial class MainForm : Form
     {
-        private Button btnContractors, btnEquipment, btnRentals, btnInspections, btnYards;
+        private Button btnContractors, btnEquipment, btnRentals, btnInspections, btnYards, btnInquiries;
         private Panel contentPanel;
         
         public MainForm()
@@ -61,6 +61,22 @@ namespace EquipmentRentalApp.Forms
             btnYards = CreateMenuButton("🏭 Service Yards", yPos += 60);
             btnYards.Click += (s, e) => LoadForm(new ServiceYardForm());
             sidebar.Controls.Add(btnYards);
+
+            // Separator line
+            Panel separator = new Panel
+            {
+                Location = new Point(10, yPos + 65),
+                Size = new Size(200, 1),
+                BackColor = Color.FromArgb(60, 60, 70)
+            };
+            sidebar.Controls.Add(separator);
+
+            // Inquiries button (highlighted differently)
+            btnInquiries = CreateMenuButton("📊 Inquiries", yPos += 80);
+            btnInquiries.BackColor = Color.FromArgb(40, 60, 100);
+            btnInquiries.ForeColor = Color.FromArgb(100, 180, 255);
+            btnInquiries.Click += (s, e) => LoadForm(new InquiriesForm());
+            sidebar.Controls.Add(btnInquiries);
             
             // Content panel
             contentPanel = new Panel
